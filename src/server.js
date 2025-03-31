@@ -1,34 +1,32 @@
-require("dotenv").config(); // el simulador de vm, manejar las variables de entorno
-const express = require("express");  //framework para trabajar routes
+require("dotenv").config();
+const express = require("express");
 const cors = require("cors");
-const morgan = require("morgan"); //solicitudes del server
+const morgan = require("morgan");
 
 const authRoutes = require("./routes/auth.routes");
-
-// Importar los productos routes
 const productRoutes = require("./routes/product.routes");
 
 const app = express();
 
-//Middleware
+// Middleware
 app.use(express.json());
 app.use(cors());
-app.use(morgan("dev")); //trabaja en el entorno de desarrollo aca
+app.use(morgan("dev"));
 
-//rutas de productos
+// Rutas de productos
 app.use("/products", productRoutes);
 
-// Rutas - Routes
-app.get("/", (req, res) => { //puntero es para que lance o lance algo
+// Ruta de autenticación
+app.use("/auth", authRoutes);
+
+
+// Ruta principal
+app.get("/", (req, res) => {
     res.send("API Ecommerce funcionando 🚀");
 });
 
-// Ruta de la autenticacion
-app.use("/auth", authRoutes);
-
-// Apuntar al puerto
-const PORT = process.env.PORT || 5000; //hace el proceso de buscar la variable port del .env
+// Servidor en el puerto definido en .env o 5000 por defecto
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`); // Comillas invertida alt+96
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-
